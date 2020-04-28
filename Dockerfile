@@ -9,7 +9,7 @@ COPY files/ /
 RUN apt-get update && \
     apt-get -y dist-upgrade && \
     apt-get -y install curl gnupg2 ca-certificates lsb-release \
-    --no-install-recommends nano ca-certificates unzip git && \
+    --no-install-recommends nano ca-certificates unzip git gettext-base && \
     echo "deb http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" \
         | tee /etc/apt/sources.list.d/nginx.list && \
     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add - && \
@@ -23,7 +23,7 @@ RUN apt-get update && \
     apt-get -y autoremove && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/* && \
-    chmod +x /nginx-foreground.sh
+    chmod +x /init.sh
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
@@ -33,4 +33,4 @@ VOLUME ["/var/www/dev-php/cached"]
 EXPOSE 80/tcp \
        443/tcp
 
-CMD ["/nginx-foreground.sh"]
+CMD ["/init.sh"]
